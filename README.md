@@ -1,71 +1,28 @@
-# MongoDB and Mongoose with Next.js
+## The Project:
 
-This example shows how you can use a MongoDB database to support your Next.js application.
+A Todo app in the style and functions like this:
 
-**Pet** is an application that allows users to add their pets' information (e.g., name, owner's name, diet, age, dislikes, likes, and photo). They can also delete it or edit it anytime.
+https://todomvc.com/examples/react-alt/#/
 
-## Deploy your own
+- Add Todos
+- Edit Todos
+- Filter
+- Complete etc.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+## Stack:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-mongodb-mongoose&project-name=with-mongodb-mongoose&repository-name=with-mongodb-mongoose)
+- Next.js
+- Tailwind.css
+- Next-Auth
+- React-Query
+- Hosted on Netlify
 
-## How to use
+## Who does what:
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+- **Ante:** Frontend - Builds components and styles it with a custom design of TodoMVC , Display of the page using Serverside Rendering, Testing Coverage ==> Github Branch "Feature"
+- **Neko:** Builds API Routes (Backend) - Sets up Serverside Auth with Next-auth, Testing Coverage ==> Github Branch "Feature"
+- **Geralt:** Project Setup with Git and Mongoose example, External API Setup (Mongo Atlas), Data modelling (Typescript types and Mongoose models, etc), File Structure, Hosting on Netlify, Testing Coverage, Git Project with Tasks and Issues, PR Requests ==> Github Branch "Feature"
 
-```bash
-npx create-next-app --example with-mongodb-mongoose with-mongodb-mongoose-app
-# or
-yarn create next-app --example with-mongodb-mongoose with-mongodb-mongoose-app
-```
+## Optional Branch:
 
-## Install and run:
-
-```bash
-npm install
-npm run dev
-# or
-yarn
-yarn dev
-```
-
-## Configuration
-
-### Step 1. Get the connection string of your MongoDB server
-
-In the case of MongoDB Atlas, it should be a string like this:
-
-```
-mongodb+srv://<username>:<password>@my-project-abc123.mongodb.net/test?retryWrites=true&w=majority
-```
-
-For more details, follow this [MongoDB Guide](https://docs.mongodb.com/guides/server/drivers/) on how to connect to MongoDB.
-
-### Step 2. Set up environment variables
-
-Copy the `.env.local.example` file in this directory to `.env.local` (which will be ignored by Git):
-
-```bash
-cp .env.local.example .env.local
-```
-
-Then set each variable on `.env.local`:
-
-- `MONGODB_URI` should be the MongoDB connection string you got from step 1.
-
-### Step 3. Run Next.js in development mode
-
-```bash
-npm install
-npm run dev
-
-# or
-
-yarn install
-yarn dev
-```
-
-## Deploy on Vercel
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+GraphQL: Swap out the Rest API stuff and add in GraphQL Support
