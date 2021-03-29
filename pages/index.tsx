@@ -1,17 +1,33 @@
-import Link from "next/link";
-import dbConnect from "../utils/dbConnect";
+import Link from 'next/link'
+import dbConnect from '../utils/dbConnect'
+import { signIn, signOut, useSession, getSession } from 'next-auth/client'
 
-const Index = () => (
-    <>
-        <h1>That's totally NOT a ToDo List!</h1>
-    </>
-);
+const Index = (props) => {
+    const { session } = props
 
-/* Retrieves pet(s) data from mongodb database */
-export async function getServerSideProps() {
-    // await dbConnect();
-
-    return { props: {} };
+    return (
+        <>
+            {!session && (
+                <>
+                    Not signed in <br />
+                    <button onClick={() => signIn()}>Sign in</button>
+                </>
+            )}
+            {session && (
+                <>
+                    Signed in as {session.user.name} <br />
+                    <button onClick={() => signOut()}>Sign out</button>
+                </>
+            )}
+        </>
+    )
 }
 
-export default Index;
+/* Retrieves pet(s) data from mongodb database */
+export async function getServerSideProps(context) {
+    // await dbConnect();
+    const session = await getSession(context)
+    return { props: { session } }
+}
+
+export default Index
