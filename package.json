@@ -1,5 +1,5 @@
 {
-    "name": "with-mongodb-mongoose",
+    "name": "not-todo",
     "version": "0.1.0",
     "scripts": {
         "dev": "next dev",
@@ -64,13 +64,24 @@
     },
     "jest": {
         "collectCoverageFrom": [
-            "src/**/*.{js,jsx,ts,tsx}",
-            "!src/**/*/*.d.ts",
-            "!src/**/*/Loadable.{js,jsx,ts,tsx}",
-            "!src/**/*/messages.ts",
-            "!src/**/*/types.ts",
-            "!src/index.tsx"
+            "**/*.{js,jsx,ts,tsx}",
+            "!**/*.d.ts",
+            "!**/node_modules/**"
         ],
+        "testPathIgnorePatterns": [
+            "/node_modules/",
+            "/.next/"
+        ],
+        "transform": {
+            "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
+        },
+        "transformIgnorePatterns": [
+            "/node_modules/",
+            "^.+\\.module\\.(css|sass|scss)$"
+        ],
+        "moduleNameMapper": {
+            "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+        },
         "coverageThreshold": {
             "global": {
                 "branches": 90,
