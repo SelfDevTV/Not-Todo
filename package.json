@@ -1,32 +1,83 @@
 {
-  "name": "with-mongodb-mongoose",
-  "version": "0.1.0",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "test": "jest"
-  },
-  "dependencies": {
-    "@babel/core": "^7.13.13",
-    "@types/jest": "^26.0.22",
-    "babel-jest": "^26.6.3",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
-    "eslint": "^7.23.0",
-    "eslint-plugin-react": "^7.23.1",
-    "jest": "^26.6.3",
-    "jest-enzyme": "^7.1.2",
-    "mongoose": "^5.9.13",
-    "next": "latest",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "swr": "0.2.2"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@types/react": "^17.0.3",
-    "eslint-config-eslint": "^7.0.0",
-    "typescript": "^4.2.3"
-  }
+    "name": "with-mongodb-mongoose",
+    "version": "0.1.0",
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "test": "jest",
+        "checkTs": "tsc --noEmit",
+        "eslint": "eslint --ext js,ts,tsx",
+        "lint": "yarn run eslint",
+        "lint:fix": "yarn run eslint --fix"
+    },
+    "dependencies": {
+        "@babel/core": "^7.13.13",
+        "@testing-library/jest-dom": "^5.11.10",
+        "@testing-library/react": "^11.2.5",
+        "@types/jest": "^26.0.22",
+        "babel-jest": "^26.6.3",
+        "eslint": "^7.23.0",
+        "eslint-plugin-react": "^7.23.1",
+        "jest": "^26.6.3",
+        "mongoose": "^5.9.13",
+        "next": "latest",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-query": "^3.13.0"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@types/react": "^17.0.3",
+        "autoprefixer": "^10.2.5",
+        "eslint-config-eslint": "^7.0.0",
+        "postcss": "^8.2.8",
+        "tailwindcss": "^2.0.4",
+        "typescript": "^4.2.3"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "sideEffects": [
+        "./src/locales/i18n.ts"
+    ],
+    "engines": {
+        "npm": ">=6.4.1",
+        "node": ">=10.13.0"
+    },
+    "lint-staged": {
+        "*.{ts,tsx,js,jsx}": [
+            "yarn run eslint --fix"
+        ],
+        "*.{md,json}": [
+            "prettier --write"
+        ]
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "src/**/*.{js,jsx,ts,tsx}",
+            "!src/**/*/*.d.ts",
+            "!src/**/*/Loadable.{js,jsx,ts,tsx}",
+            "!src/**/*/messages.ts",
+            "!src/**/*/types.ts",
+            "!src/index.tsx"
+        ],
+        "coverageThreshold": {
+            "global": {
+                "branches": 90,
+                "functions": 90,
+                "lines": 90,
+                "statements": 90
+            }
+        }
+    }
 }
