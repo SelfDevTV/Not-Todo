@@ -1,10 +1,11 @@
-import Link from 'next/link'
-import dbConnect from '../utils/dbConnect'
-import { signIn, signOut, useSession, getSession } from 'next-auth/client'
+import { signIn, signOut, useSession } from 'next-auth/client'
 
-const Index = (props) => {
-    const { session } = props
+const Index = () => {
+    const [session, loading] = useSession()
 
+    if (loading) {
+        return <p>Loading..</p>
+    }
     return (
         <>
             {!session && (
@@ -23,11 +24,8 @@ const Index = (props) => {
     )
 }
 
-/* Retrieves pet(s) data from mongodb database */
-export async function getServerSideProps(context) {
-    // await dbConnect();
-    const session = await getSession(context)
-    return { props: { session } }
+export async function getServerSideProps() {
+    return { props: {} }
 }
 
 export default Index
