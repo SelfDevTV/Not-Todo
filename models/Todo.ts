@@ -1,9 +1,16 @@
-import mongoose from "mongoose";
+import { Document, Model, model, Types, Schema, Query } from "mongoose";
 
-const TodoSchema = new mongoose.Schema({
-  title: String,
-  id: mongoose.SchemaTypes.ObjectId,
-  ownerId: mongoose.SchemaTypes.ObjectId,
-});
+// const TodoSchema = new mongoose.Schema({
+//     title: String,
+//     id: mongoose.SchemaTypes.ObjectId,
+//     ownerId: mongoose.SchemaTypes.ObjectId,
+// });
 
-export default mongoose.models.Todo || mongoose.model("Todo", TodoSchema);
+interface ToDo {
+    title: string;
+    done: boolean;
+}
+
+interface ToDoBaseDocument extends ToDo, Document {}
+
+// export default mongoose.models.Todo || mongoose.model("Todo", TodoSchema);

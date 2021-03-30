@@ -1,4 +1,5 @@
 import "../css/normalize.min.css";
+import "tailwindcss/tailwind.css";
 import Head from "next/head";
 import { Provider } from "next-auth/client";
 

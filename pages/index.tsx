@@ -1,7 +1,21 @@
+<<<<<<< HEAD
 import { signIn, signOut, useSession } from 'next-auth/client'
 
 const Index = () => {
     const [session, loading] = useSession()
+=======
+import ToDoList from "@components/ToDoList";
+import Link from "next/link";
+import dbConnect from "../utils/dbConnect";
+
+const Index = () => (
+    <>
+        <div className="container mx-auto">
+            <ToDoList />
+        </div>
+    </>
+);
+>>>>>>> Fixes, basic todolist
 
     if (loading) {
         return <p>Loading..</p>
