@@ -1,3 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import DBRunner from '@utils/nativeDb'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default (req: NextApiRequest, res: NextApiResponse) => {};
+export default async (req: NextApiRequest, res: NextApiResponse) => {}
