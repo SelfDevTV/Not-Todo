@@ -29,6 +29,33 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 return res.status(500).end()
             }
             break
+        case 'GET':
+            // get all todos
+            try {
+                const queryRes = await DBRunner.run(async (db) => {
+                    const users = db.collection('users')
+
+                    const user = await users
+                        .aggregate([
+                            { $match: { name: session.user.name } },
+                            {
+                                $lookup: {
+                                    from: 'todos',
+                                    localField: 'todos',
+                                    foreignField: '_id',
+                                    as: 'todos',
+                                },
+                            },
+                        ])
+                        .toArray()
+
+                    return user[0].todos
+                })
+                res.status(201).json(queryRes)
+            } catch (error) {
+                return res.status(500).end()
+            }
+            break
         default:
             res.setHeader('Allow', ['POST'])
             return res.status(405).end()
