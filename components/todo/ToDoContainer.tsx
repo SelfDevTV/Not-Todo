@@ -10,9 +10,11 @@ enum Filter {
 }
 
 export const ToDoContainer = () => {
+    // default is so you can see all
     const [filter, setFilter] = useState(Filter.All)
 
-    const renderFilteredTodos = () => {
+    // gets the correct list of todos to render
+    const getFilteredTodos = () => {
         switch (filter) {
             case Filter.All:
                 return testdata
@@ -25,7 +27,7 @@ export const ToDoContainer = () => {
 
     return (
         <div className="w-full border rounded-2xl shadow-lg px-3 py-2">
-            {renderFilteredTodos().map((todo) => (
+            {getFilteredTodos().map((todo) => (
                 <Fragment key={todo.title}>
                     <ToDoItem title={todo.title} isDone={todo.isDone} />
                 </Fragment>
