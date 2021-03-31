@@ -1,15 +1,11 @@
-export interface IUser {
-  name: String;
-  email: String;
-  id: String;
+export interface User {
+    name: string;
+    email: string;
+    id: string;
+    todos: Todo[];
 }
 
-export interface ITodo {
-  title: String;
-  owner: IUser;
-  ownerId: String;
-}
-
-export interface ITodos {
-  todos: ITodo[];
+export interface Todo {
+    title: string;
+    done: boolean;
 }
