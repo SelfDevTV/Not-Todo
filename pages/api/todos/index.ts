@@ -5,28 +5,34 @@ import { getSession } from 'next-auth/client'
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getSession({ req })
 
+    if (!session) {
+        return res.status(401).end()
+    }
+
     switch (req.method) {
         case 'POST':
             try {
-                DBRunner.run(async (db) => {
+                const queryRes = await DBRunner.run(async (db) => {
                     const todos = db.collection('todos')
                     const users = db.collection('users')
                     const doc = JSON.parse(req.body)
                     const result = await todos.insertOne(doc)
-                    // const user = await users.findOne({ name: session.user.name })
                     await users.updateOne(
                         { name: session.user.name },
                         { $push: { todos: result.insertedId } }
                     )
-                    result.insertedId
 
-                    return res.json(result)
+                    return result
                 })
+                res.status(201).json(queryRes)
             } catch (error) {
-                return res.status(500).send({})
+                return res.status(500).end()
             }
-
+            break
         default:
-            return res.status(400).send({})
+            res.setHeader('Allow', ['POST'])
+            return res.status(405).end()
     }
+
+    res.status(500).end()
 }

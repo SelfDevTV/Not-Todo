@@ -33,11 +33,11 @@ class DBRunner {
         const connection = await DBRunner.client.connect()
         const database = connection.db()
 
-        const result = await callback(database)
+        // const result = await callback(database)
 
-        await connection.close()
+        // await connection.close()
 
-        return result
+        return callback(database)
     }
 }
 
