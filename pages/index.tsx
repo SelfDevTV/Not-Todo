@@ -30,20 +30,20 @@ const Index = ({ name }) => {
                     Hello, {name}! <br />
                     Signed in as {session.user.name} <br />
                     <button onClick={() => signOut()}>Sign out</button>
+                    <input
+                        type="text"
+                        value={newTitle}
+                        onChange={(e) => setNewTitle(e.target.value)}
+                    ></input>
+                    <button
+                        onClick={() =>
+                            mutation.mutate({ title: newTitle, done: false })
+                        }
+                    >
+                        Submit
+                    </button>
                 </>
             )}
-            <input
-                type="text"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-            ></input>
-            <button
-                onClick={() =>
-                    mutation.mutate({ title: newTitle, done: false })
-                }
-            >
-                Submit
-            </button>
         </>
     )
 }
