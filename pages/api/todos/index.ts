@@ -57,7 +57,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
             break
         default:
-            res.setHeader('Allow', ['POST'])
+            res.setHeader('Allow', ['POST', 'GET'])
             return res.status(405).end()
     }
 
