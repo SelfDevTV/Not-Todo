@@ -6,7 +6,7 @@ export const TrashIcon = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
             width="20"
-            className="focus:outline-none"
+            className="focus:outline-none animate-fadeIn"
         >
             <path
                 strokeLinecap="round"
