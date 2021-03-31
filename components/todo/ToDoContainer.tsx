@@ -1,8 +1,9 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
+import { useQuery } from 'react-query'
+
 import { ToDoItem } from './ToDoItem'
 import { testdata } from '../../testdata'
-import { useState } from 'react'
-import { useQuery } from 'react-query'
+import type { Todo } from '@lib/types'
 
 enum Filter {
     All = 'All',
@@ -11,13 +12,10 @@ enum Filter {
 }
 
 export const ToDoContainer = () => {
-    const fetchTodos = async () => {
-        const res = await fetch('/api/todos', {
-            method: 'GET',
-        })
-        return res.json()
-    }
-    const { isLoading, error, data: todos } = useQuery('todos', fetchTodos)
+    const { isLoading, error, data: todos } = useQuery<Todo[]>(
+        'todos',
+        fetchTodos
+    )
 
     // default is so you can see all
     const [filter, setFilter] = useState(Filter.All)
@@ -26,23 +24,15 @@ export const ToDoContainer = () => {
         return <p>Loading..</p>
     }
 
-    // gets the correct list of todos to render
-    const getFilteredTodos = () => {
-        switch (filter) {
-            case Filter.All:
-                return todos
-            case Filter.Active:
-                return todos.filter((todo) => !todo.isDone)
-            case Filter.Done:
-                return todos.filter((todo) => todo.isDone)
-        }
-    }
-
     return (
         <div className="w-full border rounded-2xl shadow-lg px-3 py-2">
-            {getFilteredTodos().map((todo) => (
+            {getFilteredTodos(filter, todos).map((todo) => (
                 <Fragment key={todo._id}>
-                    <ToDoItem title={todo.title} isDone={todo.isDone} />
+                    <ToDoItem
+                        todo={todo}
+                        onDoneChanged={() => {}} //Currently unused
+                        onTitleChanged={() => {}} //Currently unused
+                    />
                 </Fragment>
             ))}
             <div className="w-full flex justify-between items-center">
@@ -78,4 +68,23 @@ export const ToDoContainer = () => {
             </div>
         </div>
     )
+}
+
+// gets the correct list of todos to render
+const getFilteredTodos = (filter: Filter, todos: Todo[]) => {
+    switch (filter) {
+        case Filter.All:
+            return todos
+        case Filter.Active:
+            return todos.filter((todo) => !todo.done)
+        case Filter.Done:
+            return todos.filter((todo) => todo.done)
+    }
+}
+
+const fetchTodos = async () => {
+    const res = await fetch('/api/todos', {
+        method: 'GET',
+    })
+    return res.json()
 }
