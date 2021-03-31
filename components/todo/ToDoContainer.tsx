@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import { ToDoItem } from './ToDoItem'
 import { testdata } from '../../testdata'
 import { useState } from 'react'
+import { useQuery } from 'react-query'
 
 enum Filter {
     All = 'All',
@@ -10,25 +11,37 @@ enum Filter {
 }
 
 export const ToDoContainer = () => {
+    const fetchTodos = async () => {
+        const res = await fetch('/api/todos', {
+            method: 'GET',
+        })
+        return res.json()
+    }
+    const { isLoading, error, data: todos } = useQuery('todos', fetchTodos)
+
     // default is so you can see all
     const [filter, setFilter] = useState(Filter.All)
+
+    if (isLoading) {
+        return <p>Loading..</p>
+    }
 
     // gets the correct list of todos to render
     const getFilteredTodos = () => {
         switch (filter) {
             case Filter.All:
-                return testdata
+                return todos
             case Filter.Active:
-                return testdata.filter((todo) => !todo.isDone)
+                return todos.filter((todo) => !todo.isDone)
             case Filter.Done:
-                return testdata.filter((todo) => todo.isDone)
+                return todos.filter((todo) => todo.isDone)
         }
     }
 
     return (
         <div className="w-full border rounded-2xl shadow-lg px-3 py-2">
             {getFilteredTodos().map((todo) => (
-                <Fragment key={todo.title}>
+                <Fragment key={todo._id}>
                     <ToDoItem title={todo.title} isDone={todo.isDone} />
                 </Fragment>
             ))}
