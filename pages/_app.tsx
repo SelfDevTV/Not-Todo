@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 
 const queryClient = new QueryClient()
 
+
 function MyApp({ Component, pageProps }) {
     return (
         <>
@@ -19,9 +20,11 @@ function MyApp({ Component, pageProps }) {
 
             <div className="grid wrapper">
                 <Provider session={pageProps.session}>
+
                     <QueryClientProvider client={queryClient}>
                         <Component {...pageProps} />
                     </QueryClientProvider>
+
                 </Provider>
             </div>
         </>
