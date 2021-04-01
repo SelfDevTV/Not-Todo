@@ -1,11 +1,11 @@
-import Input from '@components/input'
+import Input from '@components/Input'
 import { Todo } from '@lib/types'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 
-import { Button } from '../components/Button'
-import { ToDoContainer } from '../components/todo/ToDoContainer'
+import { Button } from '@components/Button'
+import { ToDoContainer } from '@components/todo/ToDoContainer'
 const Index = ({ name }) => {
     const [session, loading] = useSession()
 
@@ -19,6 +19,23 @@ const Index = ({ name }) => {
             }),
         {
             onSuccess: () => {
+                queryClient.invalidateQueries('todos')
+            },
+            onMutate: async (newTodo: Todo) => {
+                await queryClient.cancelQueries('todos')
+                const previousTodos = queryClient.getQueryData('todos')
+                queryClient.setQueryData('todos', (old: Todo[]) => [
+                    ...old,
+                    newTodo,
+                ])
+                return { previousTodos }
+            },
+            // If the mutation fails, use the context returned from onMutate to roll back
+            onError: (err, newTodo, context) => {
+                queryClient.setQueryData('todos', context.previousTodos)
+            },
+            // Always refetch after error or success:
+            onSettled: () => {
                 queryClient.invalidateQueries('todos')
             },
         }
@@ -57,22 +74,26 @@ const Index = ({ name }) => {
                         </button>
                     </div>
                     <div className="flex justify-center my-4">
-                        <div className="w-1/3">
+                        <form
+                            className="w-1/3"
+                            onSubmit={(e) => e.preventDefault()}
+                        >
                             <Input
                                 value={newTitle}
                                 onChange={(val) => setNewTitle(val)}
                             ></Input>
                             <Button
-                                onClick={() =>
+                                onClick={() => {
                                     mutation.mutate({
                                         title: newTitle,
                                         done: false,
                                     })
-                                }
+                                    setNewTitle('')
+                                }}
                                 title={'Submit'}
                             />
                             <ToDoContainer />
-                        </div>
+                        </form>
                     </div>
                 </>
             )}
