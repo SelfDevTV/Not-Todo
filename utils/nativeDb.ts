@@ -8,12 +8,13 @@ class DBRunner {
 
     private constructor() {}
 
-    private static tryInit() {
+    private static async tryInit() {
         if (!DBRunner.client) {
             DBRunner.client = new MongoClient(process.env.MONGODB_URI, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             })
+            await DBRunner.client.connect()
         }
     }
     /**
@@ -28,10 +29,9 @@ class DBRunner {
      *
      */
     public static async run<T>(callback: (db: Db) => Promise<T>): Promise<T> {
-        DBRunner.tryInit()
+        await DBRunner.tryInit()
 
-        const connection = await DBRunner.client.connect()
-        const database = connection.db()
+        const database = DBRunner.client.db()
 
         // const result = await callback(database)
 
