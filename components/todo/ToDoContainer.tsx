@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 
 import { ToDoItem } from './ToDoItem'
 import { testdata } from '../../testdata'
@@ -17,6 +17,14 @@ export const ToDoContainer = () => {
         fetchTodos
     )
 
+    //Use this mutation to update particular ToDo
+    const putToDo = useMutation((changedToDo: Todo) =>
+        fetch('/api/todos', {
+            method: 'PUT',
+            body: JSON.stringify(changedToDo),
+        })
+    )
+
     // default is so you can see all
     const [filter, setFilter] = useState(Filter.All)
 
@@ -30,7 +38,10 @@ export const ToDoContainer = () => {
                 <Fragment key={todo._id}>
                     <ToDoItem
                         todo={todo}
-                        onDoneChanged={() => {}} //Currently unused
+                        onDoneChanged={(value) => {
+                            todo.done = value
+                            putToDo.mutate(todo)
+                        }}
                         onTitleChanged={() => {}} //Currently unused
                     />
                 </Fragment>
