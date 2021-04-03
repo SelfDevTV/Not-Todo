@@ -11,12 +11,16 @@ enum Filter {
     Done = 'Done',
 }
 
-export const ToDoContainer = () => {
+interface Props {
+    serverSideToDos?: Todo[]
+}
+
+export const ToDoContainer = ({ serverSideToDos }: Props) => {
     const { isLoading, error, data: todos } = useQuery<Todo[]>(
         'todos',
-        fetchTodos
+        fetchTodos,
+        { initialData: serverSideToDos }
     )
-
     //Use this mutation to update particular ToDo
     const putToDo = useMutation((changedToDo: Todo) =>
         fetch('/api/todos', {
@@ -28,19 +32,14 @@ export const ToDoContainer = () => {
     // default is so you can see all
     const [filter, setFilter] = useState(Filter.All)
 
-    if (isLoading) {
-        return <p>Loading..</p>
-    }
-
     return (
         <div className="w-full border rounded-2xl shadow-lg px-3 py-2">
             {getFilteredTodos(filter, todos).map((todo) => (
                 <Fragment key={todo._id}>
                     <ToDoItem
                         todo={todo}
-                        onDoneChanged={(value) => {
-                            todo.done = value
-                            putToDo.mutate(todo)
+                        onDoneChanged={(newDone) => {
+                            putToDo.mutate({ ...todo, done: newDone })
                         }}
                         onTitleChanged={() => {}} //Currently unused
                     />
@@ -93,7 +92,7 @@ const getFilteredTodos = (filter: Filter, todos: Todo[]) => {
     }
 }
 
-const fetchTodos = async () => {
+export const fetchTodos = async () => {
     const res = await fetch('/api/todos', {
         method: 'GET',
     })

@@ -6,7 +6,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getSession({ req })
 
     if (!session) {
-        return res.status(401).end()
+        return res.status(401).json({ message: 'Unauthorized' })
     }
 
     switch (req.method) {
