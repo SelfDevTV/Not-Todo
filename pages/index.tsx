@@ -1,12 +1,14 @@
-import Input from '@components/Input'
-import { Todo } from '@lib/types'
-import { signIn, signOut, useSession } from 'next-auth/client'
+import { getSession, signIn, signOut, useSession } from 'next-auth/client'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 
 import { Button } from '@components/Button'
 import { ToDoContainer } from '@components/todo/ToDoContainer'
-const Index = ({ name }) => {
+import Input from '@components/Input'
+import { Todo } from '@lib/types'
+import { GetServerSideProps } from 'next'
+
+const Index = ({ serverSideToDos, name }) => {
     const [session, loading] = useSession()
 
     const queryClient = useQueryClient()
@@ -51,12 +53,8 @@ const Index = ({ name }) => {
                     <div className="grid justify-items-center ">
                         <h2 className="text-xl text-center">Not signed in</h2>
                         <br />
-                        <button
-                            className="bg-green-400 hover:bg-green-500 rounded-lg focus:outline-none"
-                            onClick={() => signIn()}
-                        >
-                            <Button title="Sign in" />
-                        </button>
+
+                        <Button onClick={() => signIn()} title="Sign in" />
                     </div>
                 </>
             )}
@@ -92,7 +90,7 @@ const Index = ({ name }) => {
                                 }}
                                 title={'Submit'}
                             />
-                            <ToDoContainer />
+                            <ToDoContainer serverSideToDos={serverSideToDos} />
                         </form>
                     </div>
                 </>
@@ -101,8 +99,32 @@ const Index = ({ name }) => {
     )
 }
 
-// export async function getServerSideProps({ req, res }) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getSession(context)
 
-// }
+    if (!session) {
+        return { props: { serverSideToDos: null } }
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/api/todos', {
+            headers: {
+                cookie: context.req.headers.cookie,
+            },
+            method: 'GET',
+        })
+
+        const todos = await response.json()
+
+        return {
+            props: {
+                serverSideToDos: todos,
+                session,
+            },
+        }
+    } catch (error) {
+        return { props: { serverSideToDos: null } }
+    }
+}
 
 export default Index
