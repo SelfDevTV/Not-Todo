@@ -1,7 +1,7 @@
 import DBRunner from '@utils/nativeDb'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
-
+import { ObjectId } from 'mongodb'
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getSession({ req })
 
@@ -56,8 +56,47 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 return res.status(500).end()
             }
             break
+        case 'PUT':
+            try {
+                const queryRes = await DBRunner.run(async (db) => {
+                    const doc = JSON.parse(req.body)
+
+                    const todos = db.collection('todos')
+                    const users = db.collection('users')
+                    //We need to check, if user actually owns ToDo, that we are trying to update
+
+                    const hasUser = await users
+                        .find({
+                            name: session.user.name,
+                            todos: new ObjectId(doc._id),
+                        })
+                        .limit(1)
+                        .count(true)
+
+                    if (hasUser < 1) {
+                        return null
+                    }
+
+                    const result = await todos.updateOne(
+                        { _id: new ObjectId(doc._id) },
+                        { $set: { title: doc.title, done: doc.done } }
+                    )
+
+                    return result
+                })
+
+                if (!queryRes) {
+                    return res.status(401).end()
+                }
+
+                res.status(201).json(queryRes)
+            } catch (error) {
+                console.log(`error`, error)
+                return res.status(500).end()
+            }
+            break
         default:
-            res.setHeader('Allow', ['POST', 'GET'])
+            res.setHeader('Allow', ['POST', 'GET', 'PUT'])
             return res.status(405).end()
     }
 
