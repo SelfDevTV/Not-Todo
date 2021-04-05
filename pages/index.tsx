@@ -71,9 +71,9 @@ const Index = ({ serverSideToDos, name }) => {
                             {'Sign Out'}
                         </button>
                     </div>
-                    <div className="flex justify-center my-4">
+                    <div className="flex justify-center m-0 mx-auto my-4 flex-col w-1/3">
                         <form
-                            className="w-1/3"
+                            className="grid grid-cols-3/1 grid-rows-1 gap-1"
                             onSubmit={(e) => e.preventDefault()}
                         >
                             <Input
@@ -90,8 +90,8 @@ const Index = ({ serverSideToDos, name }) => {
                                 }}
                                 title={'Submit'}
                             />
-                            <ToDoContainer serverSideToDos={serverSideToDos} />
                         </form>
+                        <ToDoContainer serverSideToDos={serverSideToDos} />
                     </div>
                 </>
             )}

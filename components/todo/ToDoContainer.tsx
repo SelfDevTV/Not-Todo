@@ -33,7 +33,7 @@ export const ToDoContainer = ({ serverSideToDos }: Props) => {
     const [filter, setFilter] = useState(Filter.All)
 
     return (
-        <div className="w-full border rounded-2xl shadow-lg px-3 py-2">
+        <div className="w-full border rounded-2xl shadow-lg px-3 py-2 w-1/3">
             {getFilteredTodos(filter, todos).map((todo) => (
                 <Fragment key={todo._id}>
                     <ToDoItem
@@ -41,13 +41,15 @@ export const ToDoContainer = ({ serverSideToDos }: Props) => {
                         onDoneChanged={(newDone) => {
                             putToDo.mutate({ ...todo, done: newDone })
                         }}
-                        onTitleChanged={() => {}} //Currently unused
+                        onTitleChanged={(newTitle) => {
+                            putToDo.mutate({ ...todo, title: newTitle })
+                        }} //Currently unused
                     />
                 </Fragment>
             ))}
             <div className="w-full flex justify-between items-center">
                 <div>
-                    <p>{testdata.length} items left</p>
+                    <p>{todos.length} items left</p>
                 </div>
                 <div className="flex w-1/2 justify-between">
                     <button

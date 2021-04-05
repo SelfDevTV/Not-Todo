@@ -1,8 +1,9 @@
 import useToDo from '@lib/hooks/useToDo'
 import { Todo } from '@lib/types'
 import { useState } from 'react'
-import { DotsIcon } from '../icons/DotsIcon'
-import { TrashIcon } from '../icons/TrashIcon'
+import { DotsIcon } from '../../icons/DotsIcon'
+import { TrashIcon } from '../../icons/TrashIcon'
+import ToDoEdit from './ToDoEdit'
 
 interface Props {
     todo: Todo
@@ -11,16 +12,31 @@ interface Props {
 }
 
 export const ToDoItem = ({ todo, onTitleChanged, onDoneChanged }: Props) => {
+    const [menu, setMenu] = useState<boolean>(false)
+    const [edit, setEdit] = useState<boolean>(false)
     const { done, title, setTitle, switchDone } = useToDo(
         todo,
         onDoneChanged,
         onTitleChanged
     )
-    const [menu, setMenu] = useState<boolean>(false)
+
+    const switchEdit = () => setEdit((current) => !current)
 
     return (
         <span className="flex justify-between border rounded-lg shadow-lg py-2 px-2 my-2 w-full">
-            <div>{title}</div>
+            {!edit && <div onDoubleClick={switchEdit}>{title}</div>}
+            {edit && (
+                <ToDoEdit
+                    initialValue={title}
+                    onDoubleClick={switchEdit}
+                    onSubmit={(newTitle) => {
+                        if (title != newTitle) {
+                            setTitle(newTitle)
+                        }
+                        switchEdit()
+                    }}
+                />
+            )}
             <div className="flex">
                 <input
                     type="checkbox"
