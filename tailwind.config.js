@@ -15,6 +15,10 @@ module.exports = {
                     '100%': { opacity: 1 },
                 },
             },
+            gridTemplateColumns: {
+                // Simple 16 column grid
+                '3/1': '3fr 1fr',
+            },
         },
     },
     variants: {
